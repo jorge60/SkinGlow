@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /data/
 
-Sitemap: https://www.skinglow.com/sitemap.xml
+Sitemap: https://jorge60.github.io/SkinGlow/sitemap.xml
