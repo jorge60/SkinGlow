@@ -9,6 +9,9 @@
    ========================================================================== */
 'use strict';
 
+/* ✏️ EDITABLE: WhatsApp del centro (formato internacional, sin + ni espacios) */
+const WHATSAPP = '56954207050';
+
 /* ══════════════ 01. UTILIDADES ══════════════ */
 const $  = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
@@ -387,12 +390,12 @@ function toast(msg, tipo = '') {
     },
     telefono: v => {
       const limpio = v.replace(/[\s()+-]/g, '');
-      if (!limpio) return 'Escribe tu número de teléfono.';
+      if (!limpio) return '';                       // opcional: WhatsApp ya identifica a quien escribe
       if (!/^\d{7,15}$/.test(limpio)) return 'Ingresa un teléfono válido (entre 7 y 15 dígitos).';
       return '';
     },
     correo: v => {
-      if (!v.trim()) return 'Escribe tu correo electrónico.';
+      if (!v.trim()) return '';                     // opcional
       if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(v.trim())) return 'El correo no parece válido. Ej: nombre@correo.com';
       return '';
     },
@@ -400,8 +403,7 @@ function toast(msg, tipo = '') {
       if (!v.trim()) return 'Cuéntanos en qué podemos ayudarte.';
       if (v.trim().length < 10) return 'El mensaje debe tener al menos 10 caracteres.';
       return '';
-    },
-    acepto: (v, el) => el.checked ? '' : 'Debes autorizar el tratamiento de datos para continuar.'
+    }
   };
 
   function validarCampo(nombre) {
@@ -454,14 +456,13 @@ function toast(msg, tipo = '') {
   });
 
   /* Envío */
-  form.addEventListener('submit', async e => {
+  form.addEventListener('submit', e => {
     e.preventDefault();
     estado.className = 'form__status';
 
     const ok = Object.keys(reglas).map(validarCampo).every(Boolean);
     if (!ok) {
-      const primero = $('.field.is-invalid input, .field.is-invalid textarea, .field.is-invalid select', form)
-                   || form.elements.acepto;
+      const primero = $('.field.is-invalid input, .field.is-invalid textarea, .field.is-invalid select', form);
       primero?.focus();
       primero?.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
       toast('Revisa los campos marcados en rojo.', 'err');
@@ -473,45 +474,43 @@ function toast(msg, tipo = '') {
 
     boton.classList.add('is-loading');
     boton.disabled = true;
-    $('.btn__label', boton).textContent = 'Enviando…';
+    $('.btn__label', boton).textContent = 'Abriendo WhatsApp…';
 
-    const datos = {
-      nombre:   form.elements.nombre.value.trim(),
-      telefono: form.elements.telefono.value.trim(),
-      correo:   form.elements.correo.value.trim(),
-      servicio: form.elements.servicio.value,
-      mensaje:  form.elements.mensaje.value.trim(),
-      website:  form.elements.website.value
-    };
+    // El sitio es estático (GitHub Pages): no hay servidor que reciba el
+    // formulario, así que la solicitud se entrega por WhatsApp ya redactada.
+    const lineas = [
+      `Hola Skin Glow, soy ${form.elements.nombre.value.trim()}.`,
+      ''
+    ];
 
-    try {
-      const res = await fetch('/api/contacto', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-      });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok || !json.ok) throw new Error(json.error || 'No se pudo enviar la solicitud.');
+    const servicio = form.elements.servicio.value;
+    if (servicio) lineas.push(`Servicio de interés: ${servicio}`);
 
-      estado.className = 'form__status is-ok';
-      estado.textContent = '¡Gracias! Recibimos tu solicitud y te contactaremos muy pronto para confirmar tu cita.';
-      toast('Solicitud enviada correctamente ✓', 'ok');
-      form.reset();
-      contador.textContent = '0';
-      $$('.field', form).forEach(f => f.classList.remove('is-valid', 'is-invalid'));
+    lineas.push(form.elements.mensaje.value.trim());
 
-    } catch (err) {
-      estado.className = 'form__status is-err';
-      estado.innerHTML = 'No pudimos enviar tu mensaje. Escríbenos por ' +
-        '<a class="link" href="https://wa.me/56954207050" target="_blank" rel="noopener">WhatsApp</a> ' +
-        'o inténtalo de nuevo en un momento.';
-      toast('Error al enviar. Intenta por WhatsApp.', 'err');
-
-    } finally {
-      boton.classList.remove('is-loading');
-      boton.disabled = false;
-      $('.btn__label', boton).textContent = 'Enviar solicitud';
+    const telefono = form.elements.telefono.value.trim();
+    const correo   = form.elements.correo.value.trim();
+    if (telefono || correo) {
+      lineas.push('');
+      if (telefono) lineas.push(`Mi teléfono: ${telefono}`);
+      if (correo)   lineas.push(`Mi correo: ${correo}`);
     }
+
+    const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(lineas.join('\n'))}`;
+
+    // window.open puede caer en el bloqueador de ventanas emergentes; si
+    // devuelve null se navega en la misma pestaña como respaldo.
+    const ventana = window.open(url, '_blank', 'noopener');
+    if (!ventana) window.location.href = url;
+
+    estado.className = 'form__status is-ok';
+    estado.innerHTML = 'Te llevamos a WhatsApp con el mensaje listo para enviar. ' +
+      `Si no se abrió solo, <a class="link" href="${url}" target="_blank" rel="noopener">pulsa aquí</a>.`;
+    toast('Abriendo WhatsApp con tu solicitud ✓', 'ok');
+
+    boton.classList.remove('is-loading');
+    boton.disabled = false;
+    $('.btn__label', boton).textContent = 'Enviar por WhatsApp';
   });
 })();
 

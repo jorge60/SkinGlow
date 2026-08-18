@@ -527,7 +527,7 @@
     <header class="section__head" data-reveal>
       <p class="eyebrow eyebrow--center"><span class="line" aria-hidden="true"></span> Contacto <span class="line" aria-hidden="true"></span></p>
       <h2 class="title title--center">Agenda tu cita</h2>
-      <p class="section__sub">Déjanos tus datos y te confirmamos disponibilidad el mismo día.</p>
+      <p class="section__sub">Cuéntanos qué necesitas y te confirmamos disponibilidad por WhatsApp el mismo día.</p>
     </header>
 
     <div class="contact__grid">
@@ -544,13 +544,13 @@
 
           <div class="field-row">
             <div class="field">
-              <label for="telefono">Teléfono / WhatsApp <span aria-hidden="true">*</span></label>
-              <input type="tel" id="telefono" name="telefono" autocomplete="tel" inputmode="tel" placeholder="9 1234 5678" required aria-describedby="err-telefono">
+              <label for="telefono">Teléfono <small>(opcional)</small></label>
+              <input type="tel" id="telefono" name="telefono" autocomplete="tel" inputmode="tel" placeholder="9 1234 5678" aria-describedby="err-telefono">
               <small class="field__err" id="err-telefono" role="alert"></small>
             </div>
             <div class="field">
-              <label for="correo">Correo electrónico <span aria-hidden="true">*</span></label>
-              <input type="email" id="correo" name="correo" autocomplete="email" inputmode="email" placeholder="tucorreo@ejemplo.com" required aria-describedby="err-correo">
+              <label for="correo">Correo electrónico <small>(opcional)</small></label>
+              <input type="email" id="correo" name="correo" autocomplete="email" inputmode="email" placeholder="tucorreo@ejemplo.com" aria-describedby="err-correo">
               <small class="field__err" id="err-correo" role="alert"></small>
             </div>
           </div>
@@ -575,12 +575,6 @@
             </div>
           </div>
 
-          <label class="check">
-            <input type="checkbox" id="acepto" name="acepto" required aria-describedby="err-acepto">
-            <span>Autorizo el tratamiento de mis datos para ser contactada. <a href="#" class="link">Política de privacidad</a></span>
-          </label>
-          <small class="field__err" id="err-acepto" role="alert"></small>
-
           <!-- Anti-spam: campo trampa oculto -->
           <div class="hp" aria-hidden="true">
             <label for="website">No llenar</label>
@@ -588,14 +582,14 @@
           </div>
 
           <button type="submit" class="btn btn--primary btn--lg btn--block" id="submitBtn">
-            <span class="btn__label">Enviar solicitud</span>
+            <span class="btn__label">Enviar por WhatsApp</span>
             <span class="btn__spinner" aria-hidden="true"></span>
           </button>
 
           <p class="form__alt">
-            ¿Prefieres algo más rápido?
+            Al enviar se abre WhatsApp con tu mensaje ya escrito, listo para que lo revises.
             <!-- ✏️ EDITABLE: número de WhatsApp (formato internacional sin + ni espacios) -->
-            <a href="https://wa.me/56954207050?text=Hola%20Skin%20Glow%2C%20quiero%20agendar%20una%20cita" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+            ¿Prefieres escribir directo? <a href="https://wa.me/56954207050?text=Hola%20Skin%20Glow%2C%20quiero%20agendar%20una%20cita" target="_blank" rel="noopener">Abrir el chat</a>
           </p>
 
           <div class="form__status" id="formStatus" role="status" aria-live="polite"></div>
