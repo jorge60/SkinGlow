@@ -1,0 +1,13 @@
+{
+  "name": "skinglow",
+  "version": "1.0.0",
+  "description": "Landing page para centro de estética y cosmetología. HTML5 + CSS3 + JavaScript vanilla, servidor Node sin dependencias.",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js --port 3000"
+  },
+  "engines": { "node": ">=16" },
+  "license": "UNLICENSED"
+}

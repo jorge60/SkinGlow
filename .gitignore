@@ -1,0 +1,10 @@
+# Mensajes del formulario de contacto (datos personales de clientas)
+data/*.json
+
+# Registros del servidor
+*.log
+
+# Dependencias y basura del sistema
+node_modules/
+.DS_Store
+Thumbs.db
